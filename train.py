@@ -1,6 +1,7 @@
 import torch 
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
+from model import ResNetBackbone
 
 
 # Image Normalization
@@ -39,7 +40,7 @@ test_dataset = datasets.ImageFolder(
 
 # DataLoaders
 
-batch_size = 32  
+batch_size = 32  # or 64 if your GPU allows
 
 train_loader = DataLoader(
     train_dataset,
@@ -64,6 +65,11 @@ test_loader = DataLoader(
 
 images, labels = next(iter(train_loader))
 
-# print(images.shape)  # [batch_size, 3, 224, 224]
-# print(labels.shape)  # [batch_size]
-# print(train_dataset.classes[:5])
+#print(images.shape)  # [batch_size, 3, 224, 224]
+#print(labels.shape)  # [batch_size]
+#print(train_dataset.classes[:5])
+
+model = ResNetBackbone()
+
+features = model(images)
+print(features.shape)
