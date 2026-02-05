@@ -67,13 +67,13 @@ test_loader = DataLoader(
 
 # Model, Loss, Optimizer
 num_classes = 100
-model = SportsClassifier(num_classes=num_classes).to(device)  # Moves model to GPU
+model = SportsClassifier(num_classes=num_classes, unfreeze_layer4=True).to(device)  # Moves model to GPU
 
 criterion = torch.nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=1e-3)
+optimizer = optim.Adam(model.parameters(), lr=1e-4)  ## reduced from 1e-3
 
 # Training Loop
-num_epochs = 5   
+num_epochs = 4
 for epoch in range(num_epochs):
     model.train()
     running_loss = 0.0

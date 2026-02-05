@@ -3,7 +3,7 @@ import torch.nn as nn
 from torchvision import models
 
 class ResNetBackbone(nn.Module):
-    def __init__(self):
+    def __init__(self, unfreeze_layer4=False):
         super().__init__()
         self.backbone = models.resnet50(pretrained=True)
         self.backbone.fc = nn.Identity()  # remove ImageNet classifier
@@ -12,14 +12,19 @@ class ResNetBackbone(nn.Module):
         for param in self.backbone.parameters():
             param.requires_grad = False
 
+        # Unfreezes top block
+        if unfreeze_layer4:
+            for param in self.backbone.layer4.parameters():
+                param.requires_grad = True
+
     def forward(self, x):
         return self.backbone(x)  # [batch_size, 2048]
 
 # Custom Classifier Head
 class SportsClassifier(nn.Module):
-    def __init__(self, num_classes=100):
+    def __init__(self, num_classes=100, unfreeze_layer4=False):
         super().__init__()
-        self.backbone = ResNetBackbone()
+        self.backbone = ResNetBackbone(unfreeze_layer4=unfreeze_layer4)
 
         self.classifier = nn.Sequential(
             nn.Linear(2048, 512),
