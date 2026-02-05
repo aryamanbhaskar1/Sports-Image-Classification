@@ -1,1 +1,2 @@
 # Sports-Image-Classification
+A PyTorch image classification model built on a pretrained ResNet-50 with a custom classifier head. The model selectively fine-tunes higher-level backbone layers to adapt ImageNet features to a sports classification task. The model achives strong (96.6% Accuracy) performance on a held-out test set.
